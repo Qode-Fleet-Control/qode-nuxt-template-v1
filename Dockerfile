@@ -20,4 +20,6 @@ RUN addgroup -S app && adduser -S app -G app
 COPY --from=build --chown=app:app /app ./
 USER app
 EXPOSE 3000
-CMD ["node", ".output/server/index.mjs"]
+# KEEP THIS: one log line per request (status + duration) is what the workspace Monitoring tab charts.
+# request-log.cjs (repo root, copied in with /app) is preloaded with `node -r`.
+CMD ["node", "-r", "./request-log.cjs", ".output/server/index.mjs"]
